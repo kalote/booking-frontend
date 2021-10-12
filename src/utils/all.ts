@@ -5,9 +5,10 @@ const formatAddress = (address: string): string => {
   )}`;
 };
 
-const isPassedOneHour = (ts: number): boolean => {
+// Return true if the timestamp supplied is more than 1h ago
+const isMoreThanOneHourAgo = (ts: number): boolean => {
   const now = new Date().getTime();
-  return now + 3600 > ts;
+  return ts + 3600 * 1000 < now;
 };
 
-export { formatAddress, isPassedOneHour };
+export { formatAddress, isMoreThanOneHourAgo };

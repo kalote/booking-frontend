@@ -29,9 +29,7 @@ const Header = () => {
 
   useEffect(() => {
     const { ethereum } = window as any;
-    console.log("in UseEffect");
     if (ethereum && ethereum.on && !active && !error) {
-      console.log("in");
       const handleChainChanged = (chainId: string | number) => {
         console.log("Handling 'chainChanged' event with payload", chainId);
         activate(injectedConnector);

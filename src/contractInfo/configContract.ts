@@ -1,1 +1,1 @@
-export const bookingAddress = "0x03798122aAe7a5bdE650E80B1f3698F954F79b9b";
+export const bookingAddress = "0xC22b2fB641BE8b281b78ea1AE42b16FEd1a63E33";

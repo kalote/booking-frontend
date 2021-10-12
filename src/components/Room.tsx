@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useWeb3React } from "@web3-react/core";
+import Moment from "react-moment";
 
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
@@ -11,7 +12,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import { useContract, useGetRoom } from "../blockchainHooks/utils";
-import { formatAddress } from "../utils/all";
+import { formatAddress, isMoreThanOneHourAgo } from "../utils/all";
 
 const Room: React.FC<RoomProps> = ({ roomId, prefix }) => {
   const [isBooking, setIsBooking] = useState(false);
@@ -75,6 +76,20 @@ const Room: React.FC<RoomProps> = ({ roomId, prefix }) => {
     );
   }
 
+  const disableState = () => {
+    if (
+      roomToDisplay &&
+      roomToDisplay.booked &&
+      !isMoreThanOneHourAgo(parseInt(roomToDisplay.bookedAt))
+    )
+      return false;
+    return true;
+  };
+
+  // if not booked / + d1 heure > ok
+  // if booked / - d1 heure > ko
+  // if booked / + d1 heure > ok
+
   return !roomToDisplay ? (
     <Card
       sx={{
@@ -99,10 +114,13 @@ const Room: React.FC<RoomProps> = ({ roomId, prefix }) => {
         <Typography gutterBottom variant="h5" component="div">
           {roomToDisplay.company} - {prefix + roomToDisplay.id}
         </Typography>
-        {roomToDisplay.booked ? (
-          <Typography variant="body2" color="text.secondary">
-            This room is already booked by{" "}
-            {formatAddress(roomToDisplay.bookedBy)}
+        {!disableState() ? (
+          <Typography gutterBottom variant="body2" color="text.secondary">
+            This room has already been booked by{" "}
+            {formatAddress(roomToDisplay.bookedBy)}{" "}
+            <Moment fromNow style={{ fontWeight: "bold" }}>
+              {parseInt(roomToDisplay.bookedAt)}
+            </Moment>
           </Typography>
         ) : (
           <Typography variant="body2" color="text.secondary">
@@ -115,7 +133,7 @@ const Room: React.FC<RoomProps> = ({ roomId, prefix }) => {
           color="success"
           loadingPosition="start"
           fullWidth={!roomToDisplay.booked}
-          disabled={roomToDisplay.booked}
+          disabled={!disableState()}
           loading={isBooking}
           onClick={() => handleBooking(parseInt(roomToDisplay.id))}
           startIcon={<SaveIcon />}
@@ -124,19 +142,21 @@ const Room: React.FC<RoomProps> = ({ roomId, prefix }) => {
         >
           Book
         </LoadingButton>
-        {roomToDisplay.booked && roomToDisplay.bookedBy === account && (
-          <LoadingButton
-            color="secondary"
-            loadingPosition="start"
-            loading={isCancelling}
-            onClick={() => handleCancel(parseInt(roomToDisplay.id))}
-            startIcon={<CancelIcon />}
-            variant="contained"
-            sx={{ flexGrow: 1 }}
-          >
-            Cancel
-          </LoadingButton>
-        )}
+        {roomToDisplay.booked &&
+          roomToDisplay.bookedBy === account &&
+          !isMoreThanOneHourAgo(parseInt(roomToDisplay.bookedAt)) && (
+            <LoadingButton
+              color="secondary"
+              loadingPosition="start"
+              loading={isCancelling}
+              onClick={() => handleCancel(parseInt(roomToDisplay.id))}
+              startIcon={<CancelIcon />}
+              variant="contained"
+              sx={{ flexGrow: 1 }}
+            >
+              Cancel
+            </LoadingButton>
+          )}
       </CardActions>
     </Card>
   );
