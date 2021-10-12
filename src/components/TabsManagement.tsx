@@ -41,7 +41,7 @@ function a11yProps(index: number) {
   };
 }
 
-const FullWidthTabs = () => {
+const TabsManagement = () => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
 
@@ -74,4 +74,4 @@ const FullWidthTabs = () => {
   );
 };
 
-export default FullWidthTabs;
+export default TabsManagement;

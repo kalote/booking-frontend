@@ -1,13 +1,13 @@
-import React from "react";
+import { useWeb3React } from "@web3-react/core";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
-import Connect from "../components/contract/Connect";
-import FullWidthTabs from "../components/FullWidthTabs";
+
+import Header from "../components/Header";
+import TabsManagement from "../components/TabsManagement";
 
 const theme = createTheme({
   palette: {
@@ -16,30 +16,12 @@ const theme = createTheme({
 });
 
 const Booking = () => {
-  const { jsx: connectJsx, active, account } = Connect();
+  const { active } = useWeb3React();
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Booking System - React / Solidity
-          </Typography>
-          <Box component="div">
-            {active ? (
-              <Typography variant="body1" sx={{ p: 2 }}>
-                {account}
-              </Typography>
-            ) : (
-              <Typography variant="body1" sx={{ p: 2 }}>
-                Not connected
-              </Typography>
-            )}
-          </Box>
-          <Box>{connectJsx}</Box>
-        </Toolbar>
-      </AppBar>
+      <Header />
       <main>
         <Box
           sx={{
@@ -68,7 +50,7 @@ const Booking = () => {
               system.
             </Typography>
           </Container>
-          <Container maxWidth="lg">{active && <FullWidthTabs />}</Container>
+          <Container maxWidth="lg">{active && <TabsManagement />}</Container>
         </Box>
       </main>
     </ThemeProvider>

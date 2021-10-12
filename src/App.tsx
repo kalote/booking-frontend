@@ -1,12 +1,9 @@
-import React from "react";
 import { Web3ReactProvider } from "@web3-react/core";
 import Booking from "./pages/Booking";
-import { Web3Provider } from "@ethersproject/providers";
+import Web3 from "web3";
 
-function getLibrary(provider: any): Web3Provider {
-  const library = new Web3Provider(provider);
-  library.pollingInterval = 12000;
-  return library;
+function getLibrary(provider: any) {
+  return new Web3(provider);
 }
 
 const App = () => {
