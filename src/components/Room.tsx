@@ -11,14 +11,13 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import { useContract, useGetRoom } from "../blockchainHooks/utils";
-import { formatAddress, isPassedOneHour } from "../utils/all";
+import { formatAddress } from "../utils/all";
 
 const Room: React.FC<RoomProps> = ({ roomId, prefix }) => {
   const [isBooking, setIsBooking] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const [roomToDisplay, setRoomToDisplay] = useState<Room>();
   const [refresh, setRefresh] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(null);
   const [loading, error, room] = useGetRoom(roomId, refresh);
 
   const contract = useContract();
